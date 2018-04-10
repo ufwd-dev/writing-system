@@ -1,0 +1,33 @@
+{
+  "name": "writing-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-session-sequelize": "^5.2.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "error-standardize": "^1.0.2",
+    "express-handler-loader": "^0.1.7",
+    "express-session": "^1.15.6",
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.37.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config build/webpack.base.js",
+    "satrt": "webpack-dev-server --config build/webpack.base.js --hot --host 0.0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ufwd-dev/writing-system.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ufwd-dev/writing-system/issues"
+  },
+  "homepage": "https://github.com/ufwd-dev/writing-system#readme"
+}

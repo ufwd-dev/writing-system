@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const webpack = require('webpack');
 const application = require('./webpack.base');
 
 application.mode = 'development';
@@ -15,4 +16,7 @@ application.devServer = {
 	}
 };
 
+application.plugins.push(
+	new webpack.HotModuleReplacementPlugin()
+);
 module.exports = application;

@@ -5,8 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const sequelize = require('./database');
+const config = require('../config.json');
 
 require('express-handler-loader')('ufwd_writer', {
 	pathname: path.resolve(__dirname, './middleware')
@@ -27,17 +26,12 @@ app.use('/api', cors({
 	credentials: true
 }));
 
-app.use('api', session({
-	saveUninitialized: false,
+app.use('/api', session({
+	saveUninitialized: config.saveUninitialized,
 	secret: 'writer',
-	resave: true,
-	store: new SequelizeStore({
-		db: sequelize,
-		checkExpirationInterval: 6 * 60 * 60 * 1000,
-		expiration: 24 * 60 * 60 * 1000
-	}),
+	resave: config.resave,
 	cookie: {
-		httpOnly: true
+		httpOnly: config.httpOnly
 	}
 }));
 

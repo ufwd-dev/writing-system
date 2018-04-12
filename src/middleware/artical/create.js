@@ -1,16 +1,20 @@
 'use strict';
 
-const sequelize = require('../../database');
+// const axios = require('axios');
 
-module.exports = function* createArtical(req, res, next) {
-	const Artical = sequelize.model('ufwdArtical');
-	const writerId = req.session.accountId;
+module.exports = function createArtical(req, res, next) {
 
-	const construction = Object.assign({}, req.body, {author: writerId});
+	// axios({
+	// 	method: req.method,
+	// 	url: '',
+	// 	data: req.body
+	// }).then( => {
 
-	const artical = yield Artical.create(construction);
+	// });
 
-	res.send(artical);
+	const container = req.body;
+
+	res.send(container);
 
 	next();
 };

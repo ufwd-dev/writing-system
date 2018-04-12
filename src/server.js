@@ -1,8 +1,10 @@
 'use strict';
 
+const config = require('../config.json');
+
 const http = require('http');
 const app = require('./app');
 
 const server = http.createServer(app);
 
-server.listen(8200);
+server.listen(config.listen);

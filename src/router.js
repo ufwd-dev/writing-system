@@ -3,27 +3,40 @@
 const {
 	writerSignin,
 	writerSignout,
-	isWriterSignedIn,
-	createArtical,
-	getOwnArticalList,
-	getOwnArtical,
-	updateOwnArtical,
-	deleteOwnArtical,
-	isPublished,
+	createArticle,
+	getOwnArticleList,
+	getOwnArticle,
+	updateOwnArticle,
+	deleteOwnArticle,
 	createClassification,
 	deletelassification,
+	getArticleListOfCategory,
 	$testBody,
 	$testQuery
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
 
-router.post('/api/ufwd/writer/account/session', writerSignin);
-
-router.delete('/api/ufwd/writer/account/session', writerSignout);
-
-router.post('/api/ufwd/writer/artical', $testBody({
+router.post('/api/account/session', $testBody({
 	properties: {
+		name: {
+			type: 'string'
+		},
+		password: {
+			type: 'string'
+		}
+	},
+	required: ['name', 'password'],
+	additionalProperties: false
+}), writerSignin);
+
+router.delete('/api/account/session', writerSignout);
+
+router.post('/api/article', $testBody({
+	properties: {
+		title: {
+			type: 'string'
+		},
 		content: {
 			type: 'string'
 		},
@@ -38,11 +51,11 @@ router.post('/api/ufwd/writer/artical', $testBody({
 			pattern: '^(true|false)$'
 		}
 	},
-	required: ['content', 'published'],
+	required: ['title', 'content', 'published'],
 	additionalProperties: false
-}), isWriterSignedIn, createArtical);
+}), createArticle);
 
-router.get('/api/ufwd/writer/artical', $testQuery({
+router.get('/api/article', $testQuery({
 	properties: {
 		keyword: {
 			type: 'string'
@@ -57,12 +70,15 @@ router.get('/api/ufwd/writer/artical', $testQuery({
 		}
 	},
 	additionalProperties: false
-}), isWriterSignedIn, getOwnArticalList);
+}), getOwnArticleList);
 
-router.get('/api/ufwd/writer/artical/:articalId', isWriterSignedIn, getOwnArtical);
+router.get('/api/article/:articleId', getOwnArticle);
 
-router.put('/api/ufwd/writer/artical/:articalId', $testBody({
+router.put('/api/article/:articleId', $testBody({
 	properties: {
+		title: {
+			type: 'string'
+		},
 		content: {
 			type: 'string'
 		},
@@ -78,10 +94,12 @@ router.put('/api/ufwd/writer/artical/:articalId', $testBody({
 		}
 	},
 	additionalProperties: false
-}), isWriterSignedIn, isPublished, updateOwnArtical);
+}), updateOwnArticle);
 
-router.delete('/api/ufwd/writer/artical/:articalId', isWriterSignedIn, isPublished, deleteOwnArtical);
+router.delete('/api/article/:articleId', deleteOwnArticle);
 
-router.post('/api/ufwd/writer/artical/:articalId/category/:categoryId', isWriterSignedIn, createClassification);
+router.post('/api/article/:articleId/category/:categoryId', createClassification);
 
-router.delete('/api/ufwd/writer/artical/:articalId/category/:categoryId', isWriterSignedIn, deletelassification);
+router.get('/api/category/:categoryId/article', getArticleListOfCategory);
+
+router.delete('/api/article/:articleId/category/:categoryId', deletelassification);

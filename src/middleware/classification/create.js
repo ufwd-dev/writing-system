@@ -1,6 +1,13 @@
 'use strict';
 
-const {throwError} = require('error-standardize');
+module.exports = function createClassification(req, res, next) {
+	const {axios} = req;
 
-module.exports = function* createClassification(req, res, next) {
+	axios.post(`article/${req.params.articleId}/category/${req.params.categoryId}`, req.body).then(response => {
+		res.sendStatus(response.status);
+	}, err => {
+		res.sendStatus(err.response.status);
+	}).then(() => {
+		next();
+	});
 };

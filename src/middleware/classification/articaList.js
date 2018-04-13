@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = function getOwnArticle(req, res, next) {
+module.exports = function getArticleListOfCategory(req, res, next) {
 	const {axios} = req;
 
-	axios.get(`article/${req.params.articleId}`).then(response => {
+	axios.get(`category/${req.params.categoryId}/article`).then(response => {
 		res.send(response.data);
 	}, (err) => {
 		res.sendStatus(err.response.status);

@@ -1,6 +1,13 @@
 'use strict';
 
-const {throwError} = require('error-standardize');
+module.exports = function deletelassification(req, res, next) {
+	const {axios} = req;
 
-module.exports = function* deletelassification(req, res, next) {
+	axios.delete(`article/${req.params.articleId}/category/${req.params.categoryId}`).then(response => {
+		res.sendStatus(response.status);
+	}, err => {
+		res.sendStatus(err.response.status);
+	}).then(() => {
+		next();
+	});
 };

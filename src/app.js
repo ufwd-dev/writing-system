@@ -11,13 +11,16 @@ require('express-handler-loader')('ufwd_writer', {
 	pathname: path.resolve(__dirname, './middleware')
 });
 
+const {
+	createAxios
+} = require('express-handler-loader')('ufwd_writer');
+
 const router = require('./router');
 const app = module.exports = require('express')();
 
 app.use(cookieParser());
 
-app.use(bodyParser.urlencoded({
-	extended: false,
+app.use(bodyParser.json({
 	type: 'application/json',
 	limit: '32mb'
 }));
@@ -34,5 +37,7 @@ app.use('/api', session({
 		httpOnly: config.httpOnly
 	}
 }));
+
+app.use('/api', createAxios);
 
 app.use(router);

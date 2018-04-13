@@ -1,12 +1,17 @@
 {
     "port": 80,
-    "host": "localhost",
     "protocol": "http",
     "path": "",
     "timeout": "",
     "listen": 8200,
-    "resave": false,
-    "saveUninitialized": true,
+    "resave": true,
+    "saveUninitialized": false,
     "expiration": 600000,
-    "httpOnly": true
+    "httpOnly": true,
+    "api": {
+        "host": "localhost",
+        "port": 80,
+        "protocol": "http",
+        "baseUrl": "http://localhost:80/api/ufwd/service/release"
+    }
 }

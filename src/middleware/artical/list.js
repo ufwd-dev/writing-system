@@ -1,7 +1,25 @@
 'use strict';
 
-const {throwError} = require('error-standardize');
-const Sequelize = require('sequelize');
+module.exports = function getOwnArticleList(req, res, next) {
+	const {axios} = req;
+	const {keyword, published, examine} = req.query;
 
-module.exports = function* getOwnArticalList(req, res, next) {
+	let url = 'article';
+	
+	keyword ? url = url + '?' + `keyword=${keyword}` : undefined;
+
+	published && keyword ? url = url + '&' + `published=${published}` :
+		(published ? url = url + '?' + `published=${published}` : undefined);
+	
+	examine && (published || keyword) ? url = url + '&' + `examine=${examine}` :
+		(examine ? url = url + '?' + `examine=${examine}` : undefined);
+
+	axios.get(url)
+		.then(response => {
+			res.send(response.data);
+		}, err=> {
+			res.sendStatus(err.response.status);
+		}).then(() => {
+			next();
+		});
 };

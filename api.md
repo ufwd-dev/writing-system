@@ -1,7 +1,7 @@
 writer: 
 ==========================
 
-## POST /api/ufwd/writer/account/session
+## POST /api/account/session
 登陆
 ```
 {
@@ -9,10 +9,10 @@ writer:
     password: string
 }
 ```
-## delete /api/ufwd/writer/account/session
+## delete /api/account/session
 注销
 
-## POST /api/ufwd/writer/artical
+## POST /api/article
 创建一篇文章
 ```
 {
@@ -23,13 +23,13 @@ writer:
 }
 ```
 
-## GET /api/ufwd/writer/artical?keyword=string&published=boolean&examine=boolean
+## GET /api/article?keyword=string&published=boolean&examine=boolean
 查看自己创建的所有文章
 
-## GET /api/ufwd/writer/artical/:articalId
+## GET /api/article/:articleId
 查看自己创建的某篇文章
 
-## PUT /api/ufwd/writer/artical/:articalId
+## PUT /api/article/:articleId
 修改自己创建的某篇文章
 ```
 {
@@ -40,11 +40,14 @@ writer:
 }
 ```
 
-## DELETE /api/ufwd/writer/artical/:articalId
+## DELETE /api/article/:articleId
 删除自己创建的某篇文章(未发布的可以删)
 
-## POST /api/ufwd/writer/artical/:articalId/category/:categoryId
+## POST /api/article/:articleId/category/:categoryId
 给某篇文章分类
 ```
 {}
 ```
+
+## GET /api/category/:categoryId/article
+获取该作者的某一分类的所有文章

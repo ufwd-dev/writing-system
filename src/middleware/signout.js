@@ -4,8 +4,8 @@ module.exports = function writerSignout(req, res, next) {
 	const {axios} = req;
 	
 	axios.delete('account/session').then(response => {
-		req.session.apiCookie ? delete req.session.apiCookie : undefined;
-		
+		delete req.query.token;
+
 		res.sendStatus(response.status);
 	}, err => {
 		res.sendStatus(err.response.status);

@@ -1,6 +1,7 @@
 'use strict';
 
 const {
+	createAxios,
 	writerSignin,
 	writerSignout,
 	createArticle,
@@ -16,6 +17,8 @@ const {
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
+
+router.use('/api', createAxios);
 
 router.post('/api/account/session', $testBody({
 	properties: {

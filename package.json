@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "ajv": "^6.1.1",
+    "ajv": "^6.4.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "connect-session-sequelize": "^5.2.1",
@@ -29,7 +29,7 @@
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
     "vue-loader": "^14.2.2",
-    "webpack": "^4.5.0",
+    "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14",
     "webpack-dev-server": "^3.1.3"
   },

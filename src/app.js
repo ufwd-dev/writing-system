@@ -38,6 +38,6 @@ app.use('/api', session({
 	}
 }));
 
-app.use('/api', createAxios);
+// app.use('/api', createAxios);
 
 app.use(router);

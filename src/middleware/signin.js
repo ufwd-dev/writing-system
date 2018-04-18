@@ -5,10 +5,10 @@ module.exports = function writerSignin(req, res, next) {
 
 	axios.post('account/session', req.body).then((response) => {
 
-		req.session.apiCookie = response.headers['set-cookie'][0];
-		
+		req.session.token = response.data.data.token;
+
 		res.send(response.data);
 	}, (err) => {
-		res.sendStatus(err.response.status);
+		res.send(err.message);
 	}).then(() => next());
 };

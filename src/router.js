@@ -50,8 +50,7 @@ router.post('/api/article', $testBody({
 			type: 'string'
 		},
 		published: {
-			type: 'string',
-			pattern: '^(true|false)$'
+			type: 'boolean'
 		}
 	},
 	required: ['title', 'content', 'published'],
@@ -92,8 +91,7 @@ router.put('/api/article/:articleId', $testBody({
 			type: 'string'
 		},
 		published: {
-			type: 'string',
-			pattern: '^(true|false)$'
+			type: 'boolean'
 		}
 	},
 	additionalProperties: false

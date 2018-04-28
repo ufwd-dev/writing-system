@@ -4,7 +4,7 @@ module.exports = function createArticle(req, res, next) {
 	const {axios} = req;
 
 	axios.post('article', req.body).then(response => {
-		res.sendStatus(response.status);
+		res.send(response.data);
 	}, (err) => {
 		res.sendStatus(err.response.status);
 	}).then(() => {

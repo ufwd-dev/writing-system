@@ -14,9 +14,16 @@
     "error-standardize": "^1.0.2",
     "express-handler-loader": "^0.1.7",
     "express-session": "^1.15.6",
+    "html-loader": "^0.5.5",
     "mysql2": "^1.5.3",
     "randexp": "^0.4.9",
-    "sequelize": "^4.37.6"
+    "sequelize": "^4.37.6",
+    "vue": "^2.5.16",
+    "vue-i18n": "^7.6.0",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.16",
+    "vuex": "^3.0.1",
+    "yaml-loader": "^0.5.0"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
@@ -35,7 +42,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config build/webpack.prob.js",
+    "build": "webpack --config build/webpack.prod.js",
     "dev": "webpack-dev-server --config build/webpack.dev.js"
   },
   "repository": {

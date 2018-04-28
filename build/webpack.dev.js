@@ -7,12 +7,12 @@ const application = require('./webpack.base');
 application.mode = 'development';
 
 application.devServer = {
-	port: 8000,
+	port: 8300,
 	host: '0.0.0.0',
 	hot: true,
 	contentBase: path.resolve(__dirname, '../dist'),
 	proxy: {
-		'/api': 'http://localhost:8200'
+		'/api': 'http://localhost:8000'
 	}
 };
 

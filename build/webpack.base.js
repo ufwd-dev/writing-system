@@ -48,13 +48,23 @@ module.exports = {
 			},
 			{
 				test: /\.yaml$/,
-				loader: 'json-loader'
+				use: [
+					{
+						loader: 'json-loader'
+					},
+					{
+						loader: 'yaml-loader'
+					},
+				]
 			}
 		]
 	},
 	plugins: [
 		new ExtractTextPlugin('style.css'),
-		new HtmlWebpackPlugin()
+		new HtmlWebpackPlugin({
+			template: `html-loader!${path.resolve(__dirname, './index.html')}`,
+			inject: 'head'
+		})
 	],
 	node: false
 };

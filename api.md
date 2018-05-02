@@ -51,3 +51,9 @@ writer:
 
 ## GET /api/category/:categoryId/article
 获取该作者的某一分类的所有文章
+
+## GET /api/category?keyword=string
+获取所有的分类列表
+
+## GET /api/article/:articleId/category
+获取所有的分类列表

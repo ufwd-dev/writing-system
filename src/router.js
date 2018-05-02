@@ -13,7 +13,9 @@ const {
 	deletelassification,
 	getArticleListOfCategory,
 	$testBody,
-	$testQuery
+	$testQuery,
+	getCategoryList,
+	getClassificationList
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
@@ -74,7 +76,18 @@ router.get('/api/article', $testQuery({
 	additionalProperties: false
 }), getOwnArticleList);
 
+router.get('/api/category', $testQuery({
+	properties: {
+		keyword: {
+			type: 'string'
+		}
+	},
+	additionalProperties: false
+}), getCategoryList);
+
 router.get('/api/article/:articleId', getOwnArticle);
+
+router.get('/api/article/:articleId/category', getClassificationList);
 
 router.put('/api/article/:articleId', $testBody({
 	properties: {

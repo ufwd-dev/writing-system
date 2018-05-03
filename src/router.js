@@ -15,12 +15,15 @@ const {
 	$testBody,
 	$testQuery,
 	getCategoryList,
-	getClassificationList
+	getClassificationList,
+	getToken
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
 
 router.use('/api', createAxios);
+
+router.get('/api/noop', getToken);
 
 router.post('/api/account/session', $testBody({
 	properties: {

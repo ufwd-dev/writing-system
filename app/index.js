@@ -9,6 +9,7 @@ import store from './store/index';
 import i18n from './i18n/index';
 
 const $app = new Vue(Object.assign({ router, store, i18n }, App));
+
 window.addEventListener('load', () => {
 	$app.$mount('#app');
 

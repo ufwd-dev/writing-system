@@ -16,9 +16,12 @@
 		<b-row style="margin-top: 7rem;">
 			<b-col>
 				<b-table :items="items" :fields="fields">
-					<template slot="update" slot-scope="row">
+					<template slot="operation" slot-scope="row">
 						<b-button size="sm" @click.stop="updateArticle(row)" class="mr-2">
-						update
+							编辑
+						</b-button>
+						<b-button size="sm" @click.stop="deleteArticle(row)" class="mr-2">
+							删除
 						</b-button>
 					</template>
 				</b-table>
@@ -26,8 +29,7 @@
 			<b-col>
 				<b-form
             ref="articleContent"
-            class="text-left"
-			@submit="publish">
+            class="text-left">
 					<b-form-group
 						label="标题:"
 						label-for="title">
@@ -54,10 +56,10 @@
 						</b-form-checkbox-group>
 					</b-form-group>
 					<b-form-group>
-						<b-button size="sm" @click = "create" class="mr-2">
+						<b-button size="sm" @click="create" class="mr-2">
 							保存
 						</b-button>
-						<b-button size="sm" type="submit" pressed.sync=false class="mr-2">
+						<b-button size="sm" @click="publish" class="mr-2">
 							发布
 						</b-button>
 						<b-button size="sm" type="reset" pressed.sync=false class="mr-2">
@@ -111,15 +113,15 @@ export default {
 			name: '',
 			channel: '',
 			channelId: null,
-			fields: [ 'id', 'title', 'created_at', 'updated_at', 'update'],
+			fields: [ 'id', 'title', 'created_at', 'updated_at', 'operation'],
 			items: [],
 			articleContent: {
 				title: '',
 				content: '',
 				abstract: '',
-                category: [],
-                published: null
+                category: []
 			},
+			oldCategory: [],
 			editor: {},
 			isFullScreen: false,
 			isChange: false,
@@ -158,6 +160,42 @@ export default {
 				this.isUpdate = true;
 
 				this.articleId = id;
+            }).then(() => {
+				this.getArticleCategoryList(id);
+			});
+		},
+		getArticleCategoryList(id) {
+
+			return axios.get(`/api/article/${id}/category`).then(res => {
+				const categoryList = res.data.data;
+
+				categoryList.forEach(category => {
+                    this.oldCategory.push(category.categoryId);
+					
+                    this.articleContent.category.push(category.categoryId);
+                });
+            });
+		},
+		changeClassification(newList) {
+
+			const createList = this.articleContent.category.filter(category => {
+				return this.oldCategory.indexOf(category) === -1;
+			});
+
+			const deleteList = this.oldCategory.filter(category => {
+				return this.articleContent.category.indexOf(category) === -1;
+			});
+
+			return {
+				createList, deleteList
+			};
+			
+		},
+		deleteArticle(row) {
+			const id = row.item.id;
+
+			return axios.delete(`/api/article/${id}`).then(res => {
+				this.getArticleList();
             });
 		},
 		signOut() {
@@ -172,42 +210,77 @@ export default {
 				this.channel = data.data.channel;
 			})
 		},
-		createArticle() {
-            const article = _.pick(this.articleContent, ['title', 'content', 'abstract', 'published']);
-
+		createArticle(published) {
+			const article = _.pick(this.articleContent, ['title', 'content', 'abstract']);
+			
+			article.published = false;
+			
             return axios.post('/api/article', article).then(res => {
-                console.log(res.data);
+				const id = res.data.data.id;
+				
+                this.createClassification(id, this.articleContent.category).then(() => {
+					axios.put(`/api/article/${id}`, {
+						published: published
+					});
+				});
             }).then(() => {
-				this.getArticleList();
-			}).then(() => {
 				this.reset();
+			}).then(() => {
+				this.getArticleList();
+			});
+		},
+		createClassification(id, list) {
+
+			return axios.post(`/api/article/${id}/category`, {
+				list: list
 			});
 		},
         create() {
-			this.articleContent.published = false;
+			const published = false;
 			
+			if (this.articleContent.title === '') {
+				return false;
+			}
+
 			if (!this.isUpdate) {
-				this.createArticle();
+				this.createArticle(published);
 			} else {
-				this.put();
+				this.put(published);
 			}
         },
         publish() {
-            this.articleContent.published = true;
+			const published = true;
+			
+			if (this.articleContent.title === '' || this.articleContent.content === '') {
+				return false;
+			}
 
             if (!this.isUpdate) {
-				this.createArticle();
+				this.createArticle(published);
 			} else {
-				this.put();
+				this.put(published);
 			}
 		},
-		put() {
-			const article = _.pick(this.articleContent, ['title', 'content', 'abstract', 'published']);
+		put(published) {
+			const article = _.pick(this.articleContent, ['title', 'content', 'abstract']);
+			const {createList, deleteList} = this.changeClassification(this.articleContent.category);
+
+			article.published = false;
 
             return axios.put(`/api/article/${this.articleId}`, article).then(res => {
-                
+                this.createClassification(this.articleId, createList);
             }).then(() => {
-				this.getArticleList();
+				deleteList.forEach(category => {
+					axios.delete(`/api/article/${this.articleId}/category/${category}`, {
+						list: createList
+					});
+				});
+			}).then(() => {
+				axios.put(`/api/article/${this.articleId}`, {
+					published: published
+				}).then(() => {
+					this.getArticleList();
+				});
 			}).then(() => {
 				this.reset();
 			});
@@ -217,9 +290,9 @@ export default {
 			this.articleContent.content = '';
 			this.articleContent.abstract = '';
 			this.articleContent.category = [];
-			this.articleContent.published = null;
+			this.articleContent.published = false;
 			this.isUpdate = false;
-			
+
 			this.editor.setData(this.articleContent.content);
 		},
 		createEditor() {

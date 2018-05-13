@@ -106,10 +106,7 @@ router.put('/api/article/:articleId', $testBody({
 			type: 'string'
 		},
 		abstract: {
-			type: 'string'
-		},
-		thumb: {
-			type: 'string'
+			type: ['string', 'null']
 		},
 		published: {
 			type: 'boolean'
@@ -120,7 +117,17 @@ router.put('/api/article/:articleId', $testBody({
 
 router.delete('/api/article/:articleId', deleteOwnArticle);
 
-router.post('/api/article/:articleId/category/:categoryId', createClassification);
+router.post('/api/article/:articleId/category', $testBody({
+	properties: {
+		list: {
+			type: 'array',
+			items: {
+				type: 'number'
+			}
+		}
+	},
+	additionalProperties: false
+}), createClassification);
 
 router.get('/api/category/:categoryId/article', getArticleListOfCategory);
 

@@ -4,22 +4,24 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-decoupled-document": "^10.0.0",
+    "@ckeditor/ckeditor5-markdown-gfm": "^10.0.0",
     "ajv": "^6.4.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
-<<<<<<< HEAD
-=======
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.9",
->>>>>>> 7187e66... [ADDED] components
     "connect-session-sequelize": "^5.2.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "crypto": "^1.0.1",
     "error-standardize": "^1.0.2",
+    "express-fileupload": "^0.4.0",
     "express-handler-loader": "^0.1.7",
     "express-session": "^1.15.6",
+    "font-awesome": "^4.7.0",
     "html-loader": "^0.5.5",
+    "less": "^3.0.4",
     "mysql2": "^1.5.3",
     "randexp": "^0.4.9",
     "sequelize": "^4.37.6",

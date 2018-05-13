@@ -1,5 +1,7 @@
 'use strict';
 
+const fileUpload = require('express-fileupload');
+
 const {
 	createAxios,
 	writerSignin,
@@ -16,7 +18,11 @@ const {
 	$testQuery,
 	getCategoryList,
 	getClassificationList,
-	getToken
+	getToken,
+	getAccountInformation,
+	uploadImage,
+	getImage,
+	getThumbnail
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
@@ -40,6 +46,8 @@ router.post('/api/account/session', $testBody({
 
 router.delete('/api/account/session', writerSignout);
 
+router.get('/api/account', getAccountInformation, writerSignout);
+
 router.post('/api/article', $testBody({
 	properties: {
 		title: {
@@ -49,9 +57,6 @@ router.post('/api/article', $testBody({
 			type: 'string'
 		},
 		abstract: {
-			type: 'string'
-		},
-		thumb: {
 			type: 'string'
 		},
 		published: {
@@ -120,3 +125,9 @@ router.post('/api/article/:articleId/category/:categoryId', createClassification
 router.get('/api/category/:categoryId/article', getArticleListOfCategory);
 
 router.delete('/api/article/:articleId/category/:categoryId', deletelassification);
+
+router.post('/api/image', fileUpload(), uploadImage);
+
+router.get('/api/image/:hash/regular/common', getImage);
+
+router.get('/api/thumbnail/:hash/regular/:regularName', getThumbnail);

@@ -13,10 +13,16 @@ const routes = [
 	{
 		path: '/',
 		component: Home,
+		meta: {
+			requireAccount: true
+		}
 	},
 	{
 		path: '/writer/signin',
-		component: SignIn
+		component: SignIn,
+		meta: {
+			requireAccount: false
+		}
 	}
 ];
 

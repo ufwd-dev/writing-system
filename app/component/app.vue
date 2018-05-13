@@ -1,28 +1,66 @@
 <template>
 <router-view></router-view>
-<<<<<<< HEAD
-</template>
-=======
-
 </template>
 
 <script>
 import axios from 'axios';
 
+const signInPath = '/writer/signin';
+const CHECK_INTERVAL = 5 * 60 * 1000;
+
 export default {
 	name: 'app',
-	data() {
-		return {
-			categoryList: []
+	methods: {
+		updateSession() {
+			return axios.get('/api/noop', {
+				timeout: 10000
+			}).then(res => {
+				const {token} = res.data;
+
+				this.$store.commit('updateAccount', token);
+				
+				return token;
+			});
+		},
+		catchConnectionError(err) {
+			//TODO 处理连接错误
+			// console.log('连接错误');
+			console.log(err);
 		}
 	},
-	methods: {
+	mounted() {
+		this.watcher = setInterval(() => {
+			this.updateSession().catch(this.catchConnectionError);
+		}, CHECK_INTERVAL);
 		
+
+		this.$router.beforeEach((to, from, next) => {
+
+			this.updateSession().then((token) => {
+				const requireAccount =
+					to.matched.some(record => record.meta.requireAccount);
+
+				if (token) {
+					if (!requireAccount) {
+						return next('/');
+					}
+				} else {
+					if (requireAccount) {
+						
+						return next(signInPath);
+					}
+				}
+
+				next();
+			}, this.catchConnectionError);
+		});
 	},
+	destroyed() {
+		clearInterval(this.watcher);
+	}
 }
 </script>
 
 <style lang="less">
 
 </style>
->>>>>>> 7187e66... [ADDED] components

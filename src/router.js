@@ -46,7 +46,7 @@ router.post('/api/account/session', $testBody({
 
 router.delete('/api/account/session', writerSignout);
 
-router.get('/api/account', getAccountInformation, writerSignout);
+router.get('/api/account', getAccountInformation);
 
 router.post('/api/article', $testBody({
 	properties: {

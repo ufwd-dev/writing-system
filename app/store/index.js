@@ -17,21 +17,23 @@ const store = new Vuex.Store({
 			return axios.post('/api/account/session', {
 				name, password
 			}).then(({data}) => {
-				const {token} = data;
+				const {id} = data;
 
-				commit('updateAccount', token);
+				commit('updateAccount', id);
 			});
 		},
 		signOut({ commit }) {
 			return axios.delete('/api/account/session').then(() => {
 				commit('updateAccount');
+			}).catch((err) => {
+				console.log(err.message);
 			});
 		}
 	},
 	mutations: {
-		updateAccount(state, token = null) {
-			state.token = token;
-			state.signedIn = Boolean(token);
+		updateAccount(state, id = null) {
+			state.id = id;
+			state.signedIn = Boolean(id);
 		}
 	}
 });

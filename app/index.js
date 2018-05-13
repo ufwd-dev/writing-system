@@ -19,8 +19,8 @@ const $app = new Vue(Object.assign({ router, store, i18n }, App));
 
 window.addEventListener('load', () => {
 	
-	$app.updateSession().then((token) => {
-		if (!token) {
+	$app.updateSession().then((id) => {
+		if (!id) {
 			router.push('/writer/signin');
 		}
 

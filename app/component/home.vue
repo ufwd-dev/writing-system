@@ -221,12 +221,12 @@ export default {
                 this.createClassification(id, this.articleContent.category).then(() => {
 					axios.put(`/api/article/${id}`, {
 						published: published
+					}).then(() => {
+						this.getArticleList();
 					});
 				});
             }).then(() => {
 				this.reset();
-			}).then(() => {
-				this.getArticleList();
 			});
 		},
 		createClassification(id, list) {

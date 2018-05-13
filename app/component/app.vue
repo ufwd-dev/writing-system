@@ -15,11 +15,11 @@ export default {
 			return axios.get('/api/noop', {
 				timeout: 10000
 			}).then(res => {
-				const {token} = res.data;
+				const {id} = res.data;
 
-				this.$store.commit('updateAccount', token);
+				this.$store.commit('updateAccount', id);
 				
-				return token;
+				return id;
 			});
 		},
 		catchConnectionError(err) {
@@ -36,11 +36,11 @@ export default {
 
 		this.$router.beforeEach((to, from, next) => {
 
-			this.updateSession().then((token) => {
+			this.updateSession().then((id) => {
 				const requireAccount =
 					to.matched.some(record => record.meta.requireAccount);
 
-				if (token) {
+				if (id) {
 					if (!requireAccount) {
 						return next('/');
 					}

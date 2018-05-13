@@ -27,6 +27,7 @@ app.use('/api', cors({
 
 app.use('/api', session({
 	saveUninitialized: config.saveUninitialized,
+	rolling: config.rolling,
 	secret: 'writer',
 	resave: config.resave,
 	cookie: {

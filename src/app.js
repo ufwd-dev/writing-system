@@ -35,4 +35,8 @@ app.use('/api', session({
 	}
 }));
 
+const publicPath = path.resolve(process.cwd(), './dist');
+
+app.use('/', require('express').static(publicPath));
+
 app.use(router);

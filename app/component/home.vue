@@ -1,5 +1,5 @@
 <template>
-	<b-container fluid style="padding: 0px" class="bv-example-row">
+	<b-container fluid style="padding: 0">
 		<b-navbar toggleable="md" type="dark" variant="info" style="padding-left: 120px;padding-right: 120px">
 			<b-navbar-brand>统战APP内容管理平台</b-navbar-brand>
 			<b-navbar-nav class="ml-auto">
@@ -13,9 +13,9 @@
 				</b-nav-item-dropdown>
 			</b-navbar-nav>
 		</b-navbar>
-		<b-row style="margin-top: 7rem;">
-			<b-col>
-				<b-table :items="items" :fields="fields">
+		<b-row style="margin: 3rem 0 0 0;">
+			<b-col cols="2">
+				<!-- <b-table :items="items" :fields="fields">
 					<template slot="operation" slot-scope="row">
 						<b-button size="sm" @click.stop="updateArticle(row)" class="mr-2">
 							编辑
@@ -24,9 +24,13 @@
 							删除
 						</b-button>
 					</template>
-				</b-table>
+				</b-table> -->
+				<b-list-group style="border:solid 1px #ffffff">
+					<b-list-group-item v-for="(item, index) in items"
+						v-bind:key="index" @click.stop="updateArticle(item.id)">{{item.title}}</b-list-group-item>
+				</b-list-group>
 			</b-col>
-			<b-col>
+			<b-col cols="9">
 				<b-form
             ref="articleContent"
             class="text-left">
@@ -142,9 +146,7 @@ export default {
 				this.items = data;
 			})
 		},
-		updateArticle(row) {
-			const id = row.item.id;
-
+		updateArticle(id) {
 			return axios.get(`/api/article/${id}`).then(res => {
                 const mixedArticle = _.pick(res.data.data, [
 					'title', 'content', 'abstract'

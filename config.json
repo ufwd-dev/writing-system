@@ -13,6 +13,6 @@
         "host": "localhost",
         "port": 80,
         "protocol": "http",
-        "baseUrl": "http://localhost:80/api/ufwd/service/release"
+        "baseUrl": "http://120.27.113.195:8000/api/ufwd/service/release"
     }
 }

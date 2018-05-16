@@ -29,7 +29,12 @@ const router = module.exports = require('express').Router();
 
 router.use('/api', createAxios);
 
-router.get('/api/noop', getToken);
+router.get('/api/noop', function(req, res, next){
+	req.session._garbage = Date();
+	req.session.touch();
+	
+	next();
+}, getToken);
 
 router.post('/api/account/session', $testBody({
 	properties: {

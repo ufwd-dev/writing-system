@@ -227,7 +227,6 @@ export default {
 	},
 	mounted() {
 		this.createEditor().then(() => {
-			
 			axios.get('/api/category').then(res => {
                 const categoryList = res.data.data;
                 
@@ -237,20 +236,16 @@ export default {
                         value: category.id
                     });
                 });
+			}).then(() => {
+				this.getInformation();
+			}).then(() => {
+				this.getArticleList();
 			});
-
 		}).then(() => {
-
-			this.getInformation();
-		}).then(() => {
-
 			if (this.articleId) {
 	
 				this.updateArticle(this.articleId);
 			}
-		}).then(() => {
-
-			this.getArticleList();
 		});
 
 	}
@@ -258,9 +253,6 @@ export default {
 </script>
 
 <style>
-b-navbar {
-
-}
 .document-editor {
     border: 1px solid var(--ck-color-base-border);
     border-radius: var(--ck-border-radius);
@@ -319,8 +311,7 @@ b-navbar {
     position: sticky;
     z-index: 1000;
     height: calc(100vh - 4rem);
-	overflow: auto;
-	order: 0;
+	overflow-y: auto;
 	margin-left: -15px;
 	text-align: center
 }
@@ -337,8 +328,6 @@ b-navbar {
 }
 .bd-links {
     display: block !important;
-	max-height: calc(100vh - 9rem);
-	overflow-y: auto;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 }
@@ -359,5 +348,8 @@ b-navbar {
 .bd-toc-link {
     display: block;
     padding: .25rem 1.5rem;
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 </style>

@@ -27,11 +27,11 @@ app.use('/api', cors({
 
 app.use('/api', session({
 	saveUninitialized: config.saveUninitialized,
-	rolling: config.rolling,
 	secret: 'writer',
 	resave: config.resave,
 	cookie: {
-		httpOnly: config.httpOnly
+		httpOnly: config.httpOnly,
+		maxAge: 1000 * 60 * 10
 	}
 }));
 

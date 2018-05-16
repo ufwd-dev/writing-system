@@ -21,7 +21,8 @@ export default class UploadAdapter {
 		formData.append('content', this.loader.file);
 
 		return axiosInstance.post('/api/image', formData).then(res => {
-			return res.data.data;
+			
+			return res.data;
 		});
 	}
 

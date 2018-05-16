@@ -1,6 +1,6 @@
 <template>
 	<div style="margin-top: 7rem;">
-		<b-row class="justify-content-md-center">
+		<b-row class="justify-content-md-center" style="margin: 0">
 			<b-col  col lg="3" >
 				<b-card
 					header="Primary"

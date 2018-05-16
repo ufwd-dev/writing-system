@@ -13,27 +13,29 @@
 				</b-nav-item-dropdown>
 			</b-navbar-nav>
 		</b-navbar>
-		<b-row style="margin: 3rem 0 0 0;">
+		<b-row style="margin: 0;height: 100%">
 			<b-col cols="2">
-				<!-- <b-table :items="items" :fields="fields">
-					<template slot="operation" slot-scope="row">
-						<b-button size="sm" @click.stop="updateArticle(row)" class="mr-2">
-							编辑
-						</b-button>
-						<b-button size="sm" @click.stop="deleteArticle(row)" class="mr-2">
-							删除
-						</b-button>
-					</template>
-				</b-table> -->
-				<b-list-group style="border:solid 1px #ffffff">
-					<b-list-group-item v-for="(item, index) in items"
-						v-bind:key="index" @click.stop="updateArticle(item.id)">{{item.title}}</b-list-group-item>
-				</b-list-group>
+				<div class="bd-sidebar">
+					<div @click="jump" class="bd-search d-flex align-items-center">
+						新建<i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+					</div>
+					<nav class="bd-links navbar-collapse collapse show">
+						<div class="bd-docs-item"
+							v-for="(item, index) in items"
+							v-bind:key="index" @click.stop="updateArticle(item.id)">
+							<span class="bd-toc-link"
+								>{{item.title}}</span>
+						</div>
+					</nav>
+					<b-list-group flush>
+						
+					</b-list-group>
+				</div>
 			</b-col>
-			<b-col cols="9">
+			<b-col cols="9"  style="margin: 3rem 0 0 0;">
 				<b-form
-            ref="articleContent"
-            class="text-left">
+					ref="articleContent"
+					class="text-left">
 					<b-form-group
 						label="标题:"
 						label-for="title">
@@ -60,15 +62,14 @@
 						</b-form-checkbox-group>
 					</b-form-group>
 					<b-form-group>
-						<b-button size="sm" @click="create" class="mr-2">
-							保存
-						</b-button>
-						<b-button size="sm" @click="publish" class="mr-2">
-							发布
-						</b-button>
-						<b-button size="sm" type="reset" pressed.sync=false class="mr-2">
-							重置
-						</b-button>
+						<slot
+							:articleContent="articleContent"
+							:reset="reset"
+							:getArticleList="getArticleList"
+							:createClassification="createClassification"
+							:editor="editor"
+							:oldCategory="oldCategory"
+						></slot>
 					</b-form-group>
 					<div :class="{'document-editor':!isFullScreen,'FullScreen': isFullScreen}">
 						<div ref="toolbar" class="document-editor__toolbar"></div>
@@ -97,20 +98,13 @@ import axios from 'axios';
 import _ from 'lodash';
 import dateFormat from 'dateformat';
 
-// import ArticleList from './writer/list.vue';
-// import CreateArticle from './writer/create.vue';
-
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataprocessor';
 
-import UploadAdapter from '../adapter';
+import UploadAdapter from '../../adapter';
 
 export default {
 	name: 'home',
-	// components: {
-	// 	ArticleList,
-	// 	CreateArticle
-	// },
 	data() {
 		return {
 			categoryList: [],
@@ -128,11 +122,9 @@ export default {
 			oldCategory: [],
 			editor: {},
 			isFullScreen: false,
-			isChange: false,
-			isUpdate: false,
-			articleId: ''
 		}
 	},
+	props: ['articleId'],
 	methods: {
 		getArticleList() {
             return axios.get('/api/article?published=false').then(res => {
@@ -145,6 +137,24 @@ export default {
 
 				this.items = data;
 			})
+		},
+		getArticleCategoryList(id) {
+
+			return axios.get(`/api/article/${id}/category`).then(res => {
+				const categoryList = res.data.data;
+
+				categoryList.forEach(category => {
+                    this.oldCategory.push(category.categoryId);
+					
+                    this.articleContent.category.push(category.categoryId);
+                });
+            });
+		},
+		createClassification(id, list) {
+
+			return axios.post(`/api/article/${id}/category`, {
+				list: list
+			});
 		},
 		updateArticle(id) {
 			return axios.get(`/api/article/${id}`).then(res => {
@@ -159,46 +169,10 @@ export default {
 
 				this.articleContent = mixedArticle;
 
-				this.isUpdate = true;
-
-				this.articleId = id;
+				this.$router.push(`/article/${id}`);
             }).then(() => {
 				this.getArticleCategoryList(id);
 			});
-		},
-		getArticleCategoryList(id) {
-
-			return axios.get(`/api/article/${id}/category`).then(res => {
-				const categoryList = res.data.data;
-
-				categoryList.forEach(category => {
-                    this.oldCategory.push(category.categoryId);
-					
-                    this.articleContent.category.push(category.categoryId);
-                });
-            });
-		},
-		changeClassification(newList) {
-
-			const createList = this.articleContent.category.filter(category => {
-				return this.oldCategory.indexOf(category) === -1;
-			});
-
-			const deleteList = this.oldCategory.filter(category => {
-				return this.articleContent.category.indexOf(category) === -1;
-			});
-
-			return {
-				createList, deleteList
-			};
-			
-		},
-		deleteArticle(row) {
-			const id = row.item.id;
-
-			return axios.delete(`/api/article/${id}`).then(res => {
-				this.getArticleList();
-            });
 		},
 		signOut() {
 			this.$store.dispatch('signOut').then(() => {
@@ -212,90 +186,17 @@ export default {
 				this.channel = data.data.channel;
 			})
 		},
-		createArticle(published) {
-			const article = _.pick(this.articleContent, ['title', 'content', 'abstract']);
-			
-			article.published = false;
-			
-            return axios.post('/api/article', article).then(res => {
-				const id = res.data.data.id;
-				
-                this.createClassification(id, this.articleContent.category).then(() => {
-					axios.put(`/api/article/${id}`, {
-						published: published
-					}).then(() => {
-						this.getArticleList();
-					});
-				});
-            }).then(() => {
-				this.reset();
-			});
-		},
-		createClassification(id, list) {
-
-			return axios.post(`/api/article/${id}/category`, {
-				list: list
-			});
-		},
-        create() {
-			const published = false;
-			
-			if (this.articleContent.title === '') {
-				return false;
-			}
-
-			if (!this.isUpdate) {
-				this.createArticle(published);
-			} else {
-				this.put(published);
-			}
-        },
-        publish() {
-			const published = true;
-			
-			if (this.articleContent.title === '' || this.articleContent.content === '') {
-				return false;
-			}
-
-            if (!this.isUpdate) {
-				this.createArticle(published);
-			} else {
-				this.put(published);
-			}
-		},
-		put(published) {
-			const article = _.pick(this.articleContent, ['title', 'content', 'abstract']);
-			const {createList, deleteList} = this.changeClassification(this.articleContent.category);
-
-			article.published = false;
-
-            return axios.put(`/api/article/${this.articleId}`, article).then(res => {
-                this.createClassification(this.articleId, createList);
-            }).then(() => {
-				deleteList.forEach(category => {
-					axios.delete(`/api/article/${this.articleId}/category/${category}`, {
-						list: createList
-					});
-				});
-			}).then(() => {
-				axios.put(`/api/article/${this.articleId}`, {
-					published: published
-				}).then(() => {
-					this.getArticleList();
-				});
-			}).then(() => {
-				this.reset();
-			});
-		},
 		reset() {
 			this.articleContent.title = '';
 			this.articleContent.content = '';
 			this.articleContent.abstract = '';
 			this.articleContent.category = [];
 			this.articleContent.published = false;
-			this.isUpdate = false;
 
 			this.editor.setData(this.articleContent.content);
+		},
+		jump() {
+			this.$router.push('/article');
 		},
 		createEditor() {
 			
@@ -340,23 +241,26 @@ export default {
 
 		}).then(() => {
 
-			if (this.id) {
+			this.getInformation();
+		}).then(() => {
+
+			if (this.articleId) {
 	
-				axios.get(`/api/tju/service/article/${this.id}`).then(res => {
-					this.articleContent = res.data.data;
-	
-					this.editor.setData(this.articleContent.content);
-				});
+				this.updateArticle(this.articleId);
 			}
+		}).then(() => {
+
+			this.getArticleList();
 		});
 
-		this.getInformation()
-		this.getArticleList();
 	}
 }
 </script>
 
 <style>
+b-navbar {
+
+}
 .document-editor {
     border: 1px solid var(--ck-color-base-border);
     border-radius: var(--ck-border-radius);
@@ -410,5 +314,50 @@ export default {
 }
 .document-editor__editable-container figcaption.ck-editor__editable {
 	width: auto;
+}
+.bd-sidebar {
+    position: sticky;
+    z-index: 1000;
+    height: calc(100vh - 4rem);
+	overflow: auto;
+	order: 0;
+	margin-left: -15px;
+	text-align: center
+}
+.bd-search {
+    position: relative;
+    padding: 1rem 15px;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.align-items-center {
+    align-items: center !important;
+}
+.d-flex {
+    display: flex !important;
+}
+.bd-links {
+    display: block !important;
+	max-height: calc(100vh - 9rem);
+	overflow-y: auto;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+.bd-toc-item.active {
+    margin-bottom: 1rem;
+}
+.bd-toc-item.active > .bd-toc-link {
+    color: rgba(0,0,0,.85);
+}
+.bd-navbar .navbar-nav .nav-link.active, .bd-toc-link {
+    font-weight: 400;
+}
+.bd-toc-link {
+    display: block;
+    padding: .25rem 1.5rem;
 }
 </style>

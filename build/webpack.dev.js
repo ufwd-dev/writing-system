@@ -12,7 +12,7 @@ application.devServer = {
 	hot: true,
 	contentBase: path.resolve(__dirname, '../dist'),
 	proxy: {
-		'/api': 'http://localhost:8000'
+		'/api': 'http://localhost:8888'
 	}
 };
 

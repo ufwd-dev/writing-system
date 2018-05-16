@@ -42,7 +42,7 @@ export default {
 
 				if (id) {
 					if (!requireAccount) {
-						return next('/');
+						return next('/article');
 					}
 				} else {
 					if (requireAccount) {

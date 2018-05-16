@@ -5,14 +5,22 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-import Home from './component/home.vue';
+import Create from './component/writer/create.vue';
+import Update from './component/writer/update.vue';
 
 import SignIn from './component/writer/sign-in.vue';
 
 const routes = [
 	{
-		path: '/',
-		component: Home,
+		path: '/article',
+		component: Create,
+		meta: {
+			requireAccount: true
+		}
+	},
+	{
+		path: '/article/:id',
+		component: Update,
 		meta: {
 			requireAccount: true
 		}

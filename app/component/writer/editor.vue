@@ -17,7 +17,7 @@
 			<b-col cols="2">
 				<div class="bd-sidebar">
 					<div @click="jump" class="bd-search d-flex align-items-center">
-						新建<i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+						<b-button variant="primary" style="margin: 0 auto">新建<i class="fa fa-plus fa-lg" aria-hidden="true"></i></b-button>
 					</div>
 					<nav class="bd-links navbar-collapse collapse show">
 						<div class="bd-docs-item"
@@ -139,6 +139,8 @@ export default {
 			})
 		},
 		getArticleCategoryList(id) {
+			this.oldCategory = [];
+			this.articleContent.category = [];
 
 			return axios.get(`/api/article/${id}/category`).then(res => {
 				const categoryList = res.data.data;

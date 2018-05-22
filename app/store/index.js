@@ -10,7 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
 	state: {
 		signedIn: false,
-		accountId: null,
+		id: null,
 	},
 	actions: {
 		signIn({ commit }, { name, password }) {

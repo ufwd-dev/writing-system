@@ -1,7 +1,5 @@
 'use strict';
 
-const config = require('../../../config.json');
-
 module.exports = function uploadImage(req, res, next) {
 	const {axios} = req;
 
@@ -10,11 +8,7 @@ module.exports = function uploadImage(req, res, next) {
 			'Content-Type': 'multipart/form-data'
 		}
 	}).then(response => {
-		const hash = response.data.data.hash;
-
-		res.send({
-			default: `http://${config.api.host}:${config.api.port}/api/image/${hash}/regular/common`
-		});
+		res.send(response.data.data);
 	}, (err) => {
 		res.sendStatus(err.response.status);
 	}).then(() => {

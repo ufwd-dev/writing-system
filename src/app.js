@@ -30,8 +30,7 @@ app.use('/api', session({
 	secret: 'writer',
 	resave: config.resave,
 	cookie: {
-		httpOnly: config.httpOnly,
-		maxAge: 1000 * 60 * 10
+		httpOnly: config.httpOnly
 	}
 }));
 

@@ -18,23 +18,24 @@ const {
 	$testQuery,
 	getCategoryList,
 	getClassificationList,
-	getToken,
 	getAccountInformation,
 	uploadImage,
-	getImage,
-	getThumbnail
+	getToken
 } = require('express-handler-loader')('ufwd_writer');
 
 const router = module.exports = require('express').Router();
 
 router.use('/api', createAxios);
 
-router.get('/api/noop', function(req, res, next){
-	req.session._garbage = Date();
-	req.session.touch();
+// router.get('/api/noop', function(req, res, next){
 	
-	next();
-}, getToken);
+// 	res.send({
+// 		id: req.session.token
+// 	});
+
+// 	next();
+// });
+router.get('/api/noop', getToken);
 
 router.post('/api/account/session', $testBody({
 	properties: {
@@ -139,7 +140,3 @@ router.get('/api/category/:categoryId/article', getArticleListOfCategory);
 router.delete('/api/article/:articleId/category/:categoryId', deletelassification);
 
 router.post('/api/image', fileUpload(), uploadImage);
-
-router.get('/api/image/:hash/regular/common', getImage);
-
-router.get('/api/thumbnail/:hash/regular/:regularName', getThumbnail);

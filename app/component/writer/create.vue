@@ -40,7 +40,6 @@ export default {
 					axios.put(`/api/article/${id}`, {
 						published: published
 					}).then(() => {
-						console.log(1111111);
 						getArticleList();
 					});
 				});

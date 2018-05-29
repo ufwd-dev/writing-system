@@ -27,9 +27,6 @@
 								>{{item.title}}</span>
 						</div>
 					</nav>
-					<b-list-group flush>
-						
-					</b-list-group>
 				</div>
 			</b-col>
 			<b-col cols="9"  style="margin: 3rem 0 0 0;">
@@ -39,7 +36,7 @@
 					<b-form-group
 						label="标题:"
 						label-for="title">
-						<b-form-input id="title"
+						<b-form-input
 							type="text"
 							v-model="articleContent.title"
 							required
@@ -49,7 +46,7 @@
 					<b-form-group
 						label="摘要:"
 						label-for="abstract">
-						<b-form-textarea id="textarea1"
+						<b-form-textarea
 							v-model="articleContent.abstract"
 							placeholder="请输入文章摘要"
 							:rows="3"
@@ -64,7 +61,6 @@
 					<b-form-group>
 						<slot
 							:articleContent="articleContent"
-							:reset="reset"
 							:getArticleList="getArticleList"
 							:createClassification="createClassification"
 							:editor="editor"
@@ -195,7 +191,7 @@ export default {
 			this.articleContent.category = [];
 			this.articleContent.published = false;
 
-			this.editor.setData(this.articleContent.content);
+			this.editor.setData('');
 		},
 		jump() {
 			this.$router.push('/article');
@@ -311,7 +307,7 @@ export default {
 }
 .bd-sidebar {
     position: sticky;
-    z-index: 1000;
+    z-index: 90;
     height: calc(100vh - 4rem);
 	overflow-y: auto;
 	margin-left: -15px;

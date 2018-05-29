@@ -14,18 +14,18 @@
 						 <b-form-group
 							label="用户名:"
 							label-for="username">
-							<b-form-input id="username"
+							<b-form-input
 								type="text"
 								v-model="options.name"
 								required
 								placeholder="请输入用户名">
 							</b-form-input>
 						</b-form-group>
-						<b-link href="#foo" style="float: right;" >忘记密码？</b-link>
+						<b-link href="#" style="float: right;" >忘记密码？</b-link>
 						<b-form-group
 							label="密码:"
 							label-for="password">
-							<b-form-input id="password"
+							<b-form-input
 								type="text"
 								v-model="options.password"
 								required
@@ -35,9 +35,6 @@
 						<div style="float: right;">
 							<b-button  type="submit" pressed.sync=false variant="outline-primary">
 								提交
-							</b-button>
-							<b-button  type="reset"  pressed.sync=false variant="outline-primary">
-								重置
 							</b-button>
 						</div>
 					</b-form>
@@ -60,11 +57,12 @@ export default {
 	},
 	methods: {
 		signIn (evt) {
-      		evt.preventDefault();
+			evt.preventDefault();
+			  
       		this.$store.dispatch('signIn', this.options).then(() => {
 				this.$router.push({ path: '/' });
 			});
-    	}
+		}
 	}
 }
 </script>

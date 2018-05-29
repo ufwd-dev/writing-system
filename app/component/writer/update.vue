@@ -5,10 +5,38 @@
 				class="mr-2">
                 保存修改
             </b-button>
-			<b-button size="sm" @click="publish(article.articleContent, article.oldCategory, article.createClassification)"
+			<b-button size="sm"
+				@click="shown"
 				class="mr-2">
 				提交审核
 			</b-button>
+			<b-modal v-model="success"
+				id="keep"
+				title="提示">
+				<b-container fluid>
+					<p>保存成功</p>
+				</b-container>
+				<div slot="modal-footer" class="float-right">
+					<b-btn size="sm" variant="primary" @click="success=false">
+					确定
+					</b-btn>
+				</div>
+			</b-modal>
+			<b-modal v-model="show"
+			    id="tooltips"
+				title="提示">
+				<b-container fluid>
+					<p>是否要提交文章？提交之后你将失去对文章的修改机会</p>
+				</b-container>
+				<div slot="modal-footer" class="float-right">
+					<b-btn size="md" variant="primary" @click="publish(article.articleContent, article.oldCategory, article.createClassification)">
+					是
+					</b-btn>
+					<b-btn size="md" variant="primary" @click="show=false">
+					否
+					</b-btn>
+				</div>
+			</b-modal>
 		</template>
 	</editor>
 </template>
@@ -22,13 +50,18 @@ export default {
     name: 'updateArticle',
     data() {
         return {
-            articleId: this.$route.params.id
+			articleId: this.$route.params.id,
+			show: false,
+			success: false
         }
     },
     components: {
 		Editor
     },
     methods: {
+		shown() {
+			this.show = true;
+		},
 		changeClassification(ownCategory, oldCategory) {
 
 			const createList = ownCategory.filter(category => {
@@ -64,8 +97,6 @@ export default {
 				axios.put(`/api/article/${this.articleId}`, {
 					published: published
 				});
-			}).then(() => {
-				this.$router.push('/article');
 			});
 		},
         update(articleContent, oldCategory, createClassification) {
@@ -75,7 +106,9 @@ export default {
 				return false;
 			}
 
-			this.put(articleContent, published, oldCategory, createClassification);
+			this.put(articleContent, published, oldCategory, createClassification).then(() => {
+				this.success = true;
+			});
 		},
 		publish(articleContent, oldCategory, createClassification) {
 			const published = true;
@@ -84,7 +117,9 @@ export default {
 				return false;
 			}
 
-            this.put(articleContent, published, oldCategory, createClassification);
+            this.put(articleContent, published, oldCategory, createClassification).then(() => {
+				this.$router.push('/article');
+			});
 		}
 	}
 }

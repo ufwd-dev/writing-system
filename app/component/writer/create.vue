@@ -8,7 +8,7 @@
 			<b-button size="sm" @click="publish(article.articleContent, article.createClassification, article.editor, article.getArticleList)" class="mr-2">
 				提交审核
 			</b-button>
-			<b-button size="sm" type="reset" pressed.sync=false class="mr-2">
+			<b-button size="sm" @click="reset(article.articleContent, article.editor)" class="mr-2">
 				重置
 			</b-button>
         </template>

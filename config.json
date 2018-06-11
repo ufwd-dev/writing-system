@@ -13,6 +13,6 @@
         "host": "120.27.113.195",
         "port": 8888,
         "protocol": "http",
-        "baseUrl": "http://120.27.113.195:8000/api/ufwd/service/release"
+        "baseUrl": "http://ufwd-ws.lemonce.com/api/ufwd/service/release"
     }
 }

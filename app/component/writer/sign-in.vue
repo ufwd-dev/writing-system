@@ -21,7 +21,7 @@
 								placeholder="请输入用户名">
 							</b-form-input>
 						</b-form-group>
-						<b-link href="#" style="float: right;" >忘记密码？</b-link>
+						<!-- <b-link href="#" style="float: right;" >忘记密码？</b-link> -->
 						<b-form-group
 							label="密码:"
 							label-for="password">
@@ -32,11 +32,14 @@
 								placeholder="输入密码">
 							</b-form-input>
 						</b-form-group>
-						<div style="float: right;">
-							<b-button  type="submit" pressed.sync=false variant="outline-primary">
+						<div>
+							<b-button  style="margin:20px 80%;"  type="submit" pressed.sync=false variant="outline-primary">
 								提交
 							</b-button>
 						</div>
+						<b-alert variant="danger" :show="isShow">
+							登录失败！
+						</b-alert>
 					</b-form>
 				</b-card>
 			</b-col>
@@ -52,7 +55,8 @@ export default {
 			options: {
 				name: '',
 				password: ''
-			}
+			},
+			isShow: false
 		}
 	},
 	methods: {
@@ -61,6 +65,8 @@ export default {
 			  
       		this.$store.dispatch('signIn', this.options).then(() => {
 				this.$router.push({ path: '/' });
+			}).catch(err => {
+				this.isShow = true;
 			});
 		}
 	}

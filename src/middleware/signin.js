@@ -9,6 +9,6 @@ module.exports = function writerSignin(req, res, next) {
 
 		res.send(response.data);
 	}, (err) => {
-		res.send(err.message);
+		res.status(err.response.status).end(err.message);
 	}).then(() => next());
 };

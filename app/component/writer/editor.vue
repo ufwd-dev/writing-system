@@ -23,7 +23,7 @@
 						<div class="bd-docs-item"
 							v-for="(item, index) in items"
 							v-bind:key="index" @click.stop="updateArticle(item.id)">
-							<span class="bd-toc-link"
+							<span class="bd-toc-link" :class="{'fail': item.fail}"
 								>{{item.title}}</span>
 						</div>
 					</nav>
@@ -127,6 +127,12 @@ export default {
 				const data = res.data.data;
 
 				data.forEach(element => {
+					element.fail = false;
+
+					if (element.examine === false) {
+						element.fail = true;
+					}
+
 					element.created_at = dateFormat(element.created_at, 'yyyy/mm/dd  HH:MM');
 					element.updated_at = dateFormat(element.updated_at, 'yyyy/mm/dd  HH:MM');
 				});
@@ -157,7 +163,7 @@ export default {
 		updateArticle(id) {
 			return axios.get(`/api/article/${id}`).then(res => {
                 const mixedArticle = _.pick(res.data.data, [
-					'title', 'content', 'abstract'
+					'title', 'content', 'abstract', 'examine', 'comments'
 				]);
 
 				this.editor.setData(mixedArticle.content);
@@ -349,5 +355,9 @@ export default {
 	overflow-x: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	cursor: pointer;
+}
+.fail {
+	color: red;
 }
 </style>

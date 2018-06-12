@@ -1,6 +1,11 @@
 <template>
 	<editor :articleId="articleId">
 		<template slot-scope="article">
+			<div v-if="article.articleContent.examine === false">
+				<b-alert show variant="danger">
+					审核意见：{{article.articleContent.comments}}
+				</b-alert>
+			</div>
 			<b-button size="sm" @click="update(article.articleContent, article.oldCategory, article.createClassification)"
 				class="mr-2">
                 保存修改

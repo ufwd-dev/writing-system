@@ -27,6 +27,9 @@ export default class UploadAdapter {
 	}
 
 	abort() {
-		this.source.cancel();
+		if (this.source) {
+
+			this.source.cancel();
+		}
 	}
 }

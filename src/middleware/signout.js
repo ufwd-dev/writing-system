@@ -9,7 +9,7 @@ module.exports = function writerSignout(req, res, next) {
 
 		res.sendStatus(response.status);
 	}, err => {
-		res.sendStatus(err.response.status);
+		res.sendStatus(err.response ? err.response.status : 500);
 	}).then(() => {
 		next();
 	}).catch((err) => {

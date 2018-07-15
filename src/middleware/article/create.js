@@ -6,7 +6,7 @@ module.exports = function createArticle(req, res, next) {
 	axios.post('article', req.body).then(response => {
 		res.send(response.data);
 	}, (err) => {
-		res.sendStatus(err.response.status);
+		res.sendStatus(err.response ? err.response.status : 500);
 	}).then(() => {
 		next();
 	});

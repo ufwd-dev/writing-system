@@ -6,7 +6,7 @@ module.exports = function deletelassification(req, res, next) {
 	axios.delete(`article/${req.params.articleId}/category/${req.params.categoryId}`).then(response => {
 		res.sendStatus(response.status);
 	}, err => {
-		res.sendStatus(err.response.status);
+		res.sendStatus(err.response ? err.response.status : 500);
 	}).then(() => {
 		next();
 	});

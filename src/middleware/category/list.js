@@ -11,7 +11,7 @@ module.exports = function getCategoryList(req, res, next) {
 		.then(response => {
 			res.send(response.data);
 		}, err=> {
-			res.sendStatus(err.response.status);
+			res.sendStatus(err.response ? err.response.status : 500);
 		}).then(() => {
 			next();
 		});

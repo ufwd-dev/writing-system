@@ -55,11 +55,15 @@ export default {
     name: 'updateArticle',
     data() {
         return {
-			articleId: this.$route.params.id,
 			show: false,
 			success: false
         }
-    },
+	},
+	computed: {
+		articleId() {
+			return this.$route.params.id;
+		}
+	},
     components: {
 		Editor
     },
@@ -87,6 +91,8 @@ export default {
 			const {createList, deleteList} = this.changeClassification(articleContent.category, oldCategory);
 
 			article.published = false;
+
+			console.log(this.articleId, this.$route.params.id);
 
             return axios.put(`/api/article/${this.articleId}`, article).then(res => {
 				if (createList.length !== 0) {

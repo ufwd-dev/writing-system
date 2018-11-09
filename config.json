@@ -10,9 +10,9 @@
     "expiration": 600000,
     "httpOnly": true,
     "api": {
-        "host": "120.27.113.195",
+        "host": "http://ufwd.tjxqtzb.gov.cn",
         "port": 8888,
         "protocol": "http",
-        "baseUrl": "http://ufwd-ws.lemonce.com/api/ufwd/service/release"
+        "baseUrl": "http://ufwd.tjxqtzb.gov.cn/api/ufwd/service/release"
     }
 }
